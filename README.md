@@ -1,4 +1,4 @@
-# LaTeX author support for the International Press book series *Current Developments in Mathematics* (*CDM*)
+# International Press book series CDM author support
 
 ## Table of Contents
 
