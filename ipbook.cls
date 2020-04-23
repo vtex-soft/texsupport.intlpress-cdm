@@ -1,19 +1,23 @@
 %% This is file `ipbook.cls' (edited `ip-book-cdm.cls' file version)
-%% 
+%%
 %% LaTeX 2e class file for the processing of LaTeX2e files
 %% of the following International Press book series:
 %%
 %% Harvard CMSA Series in Mathematics (CMSA)
+%% Proceedings of the International Congress of Chinese Mathematicians (ICCMP)
+%% Representation Theory, Automorphic Forms, and Complex Geometry\par A Tribute to Wilfried Schmid (SCHMIDW)
 %% Current Developments in Mathematics (CDM)
 %% Surveys in Differential Geometry (SDG)
+%%
+%% published by Internation Press of Boston
 %%
 %% Macros are maintained by Lolita Tolen\.{e}, VTeX Ltd., Lithuania
 %% for International Press, U.S.A.
 %% Please submit bugs or your comments to latex-support@vtex.lt
 %%
-%% This class file loads standard "amsproc.cls" with appropriate settings 
+%% This class file loads standard "amsproc.cls" with appropriate settings
 %%
-%% You are free to use this style file as you see fit, provided
+%% You are free to use this class file as you see fit, provided
 %% that you do not make changes to the file.
 %% If you DO make changes, you are required to rename this file.
 %%
@@ -37,14 +41,25 @@
 %%   Grave accent  \`     Left brace    \{     Vertical bar  \|
 %%   Right brace   \}     Tilde         \~}
 %%
-
 \NeedsTeXFormat{LaTeX2e}[1995/06/01]
-\ProvidesClass{ipbook}[2019/01/23 v1.1, driver class for IP book series]
+\ProvidesClass{ipbook}
+    [2020/04/22 v1.3, driver class for IP book series]
 
 \DeclareOption{cmsa}{%
     \def\series@id{cmsa}%
     \def\@publisher@name{International Press of Boston}%
     \def\seriesname{CMSA Series in Mathematics}%
+    }
+\DeclareOption{iccmp}{%
+    \def\series@id{iccmp}%
+    \def\@publisher@name{International Press of Boston}%
+    \def\seriesname{Proceedings of the International Congress of Chinese Mathematicians}%
+    }
+\DeclareOption{schmidw}{%
+    \def\series@id{schmidw}%
+    \def\@publisher@name{International Press of Boston}%
+    \def\seriesname{Representation Theory, Automorphic Forms, and Complex Geometry\par
+                    A Tribute to Wilfried Schmid}%
     }
 \DeclareOption{cdm}{%
     \def\series@id{cdm}%
@@ -82,10 +97,10 @@
 
 \frenchspacing
 
-% edit the volume year, as needed
-
 \@ifundefined{@publisher@name}{\gdef\@publisher@name{International Press}}{}
-\copyrightinfo{\,\number\year}{\@publisher@name}
+\def\@publ@year{\year}
+\def\publyear#1{\gdef\@publ@year{#1}}
+\copyrightinfo{\,\number\@publ@year}{\@publisher@name}
 
 \def\publname{\csname seriesname\endcsname}%
 
@@ -94,7 +109,6 @@
   \vspace{-45pt}
   \procart@logo
   \vspace{45pt}}
-
 
 \newcommand{\tocqchapter}[2]{%
   \noindent \emph{#1}\hfill #2\par}
@@ -114,7 +128,6 @@
   \textsc{#2}\hfill #3\par}
 
 \setcounter{tocdepth}{1}
-
 
 \def\startlocaldefs{\makeatletter}
 \def\endlocaldefs{\makeatother}
@@ -149,3 +162,5 @@
     }{}
 
 \endinput
+%%
+%% End of file `ipbook.cls'.
