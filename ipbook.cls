@@ -4,7 +4,7 @@
 %% of the following International Press book series:
 %%
 %% Harvard CMSA Series in Mathematics (CMSA)
-%% Proceedings of the International Congress of Chinese Mathematicians (ICCMP)
+%% Proceedings of the International Consortium of Chinese Mathematicians (ICCMP)
 %% Representation Theory, Automorphic Forms, and Complex Geometry\par A Tribute to Wilfried Schmid (SCHMIDW)
 %% Current Developments in Mathematics (CDM)
 %% Surveys in Differential Geometry (SDG)
@@ -43,7 +43,14 @@
 %%
 \NeedsTeXFormat{LaTeX2e}[1995/06/01]
 \ProvidesClass{ipbook}
-    [2020/04/22 v1.3, driver class for IP book series]
+    [2024/08/23 v1.10, driver class for IP book series]
+
+%%  DEPENDENCIES:
+%%  - ipbook-vtex.cfg
+%%  - amsproc.cls
+%%
+
+\def\series@id{}%
 
 \DeclareOption{cmsa}{%
     \def\series@id{cmsa}%
@@ -53,13 +60,23 @@
 \DeclareOption{iccmp}{%
     \def\series@id{iccmp}%
     \def\@publisher@name{International Press of Boston}%
-    \def\seriesname{Proceedings of the International Congress of Chinese Mathematicians}%
+    \def\seriesname{Proceedings of the International Consortium of Chinese Mathematicians}%
     }
 \DeclareOption{schmidw}{%
     \def\series@id{schmidw}%
     \def\@publisher@name{International Press of Boston}%
     \def\seriesname{Representation Theory, Automorphic Forms, and Complex Geometry\par
                     A Tribute to Wilfried Schmid}%
+    }
+\DeclareOption{singer}{%
+    \edef\series@id{singer}%
+    \def\@publisher@name{}%
+    \def\seriesname{}%
+    }
+\DeclareOption{yau2}{%
+    \edef\series@id{yau2}%
+    \def\@publisher@name{}%
+    \def\seriesname{}%
     }
 \DeclareOption{cdm}{%
     \def\series@id{cdm}%
@@ -80,11 +97,22 @@
 
 \LoadClass{amsproc}[2004/08/06]
 
+\long\def\@@ifstrequal#1#2{%
+  \begingroup
+    \edef\etb@tempa{#1}%\edef\etb@tempa{\detokenize{#1}}%
+    \edef\etb@tempb{#2}%\edef\etb@tempb{\detokenize{#2}}%
+    \ifx\etb@tempa\etb@tempb
+      \aftergroup\@firstoftwo
+    \else
+      \aftergroup\@secondoftwo
+    \fi
+  \endgroup
+  }
+
 \def\trimwidth{177.8mm}
 \def\trimheight{254mm}
-
-\AtBeginDvi{\special{papersize=\trimwidth,\trimheight}}
-
+\setlength\paperwidth{\trimwidth}
+\setlength\paperheight{\trimheight}
 \hoffset=-1in
 \voffset=-1in
 
@@ -97,10 +125,36 @@
 
 \frenchspacing
 
+\@@ifstrequal{\series@id}{singer}{%
+  \let\ps@plain\ps@empty
+  \let\ps@firstpage\ps@empty
+  \let\ps@headings\ps@empty
+  \let\ps@myheadings\ps@empty
+  \pagestyle{empty}%
+  \thispagestyle{empty}%
+  }{}%
+
+\@@ifstrequal{\series@id}{yau2}{%
+  \let\ps@plain\ps@empty
+  \let\ps@firstpage\ps@empty
+  \let\ps@headings\ps@empty
+  \let\ps@myheadings\ps@empty
+  \pagestyle{empty}%
+  \thispagestyle{empty}%
+  }{}%
+
 \@ifundefined{@publisher@name}{\gdef\@publisher@name{International Press}}{}
 \def\@publ@year{\year}
 \def\publyear#1{\gdef\@publ@year{#1}}
-\copyrightinfo{\,\number\@publ@year}{\@publisher@name}
+\@@ifstrequal{\series@id}{singer}{%
+    \copyrightinfo{}{}%
+  }{%
+  \@@ifstrequal{\series@id}{yau2}{%
+      \copyrightinfo{}{}%
+    }{%
+      \copyrightinfo{\,\number\@publ@year}{\@publisher@name}%
+    }%
+  }%
 
 \def\publname{\csname seriesname\endcsname}%
 
@@ -160,6 +214,36 @@
     \newcounter{lastpage}
     \let\lastpage\ip@lastpage
     }{}
+
+\newif\ifgaramond \garamondfalse
+\@@ifstrequal{\series@id}{singer}{%
+  \garamondtrue
+  }{}%
+\@@ifstrequal{\series@id}{yau2}{%
+  \garamondtrue
+  }{}%
+\ifgaramond
+  \usepackage[quiet,no-math]{fontspec}%
+  \setmainfont[
+    Extension=.otf,
+    UprightFont=*-Regular,
+    %UprightFont=*-Medium,
+    %BoldFont=*-Semibold,
+    BoldFont=*-Bold,
+    ItalicFont=*-Italic,
+    %ItalicFont=*-RegularItalic,
+    %ItalicFont=*-MediumItalic,
+    %BoldItalicFont=*-SemiBoldItalic,
+    BoldItalicFont=*-BoldItalic,
+    %Scale=MatchLowercase,
+    ]{AGaramondPro}%
+    %]{EBGaramond}%
+    %]{CormorantGaramond}%
+  %\DeclareFontFamily{TU}{AGaramondPro(0)}{}%
+  %\DeclareFontShape{TU}{AGaramondPro(0)}{m}{it}%
+  % {<->tipasl10}{}%
+  \RequirePackage{luafonts}%
+\fi
 
 \endinput
 %%
